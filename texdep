@@ -54,15 +54,21 @@ sed -e 's,$,.bib,'
 
 <"$file" sed -E -e '/^\s*%/d;/^.*\\includegraphics/!d;s,^.*\\includegraphics[^{]*\{([^}]+)\}.*$,\1,' |
 while IFS= read name ; do
+
+	# Empty name
 	if [ -z "$name" ] ; then
 		continue
 	fi
 
+	# Add extension only if there is not already one
 	if echo "$name" | grep -qvE '\.pdf$' ; then
 		if echo "$name" | grep -qvE '\.png$' ; then
-			name="$name.$graphicsext"
+			if echo "$name" | grep -qvE '\.eps$' ; then
+				name="$name.$graphicsext"
+			fi
 		fi
 	fi
+
 	echo "$name"
 done
 
