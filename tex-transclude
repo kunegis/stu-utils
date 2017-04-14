@@ -1,0 +1,30 @@
+#! /usr/bin/perl
+#
+# Via STDIN and STDOUT, replace \input{...} lines in Tex files with the
+# content of the included file. 
+#
+# The \input{...} commands must be on individual lines.
+#
+
+use strict;
+use warnings;
+use autodie qw(:all);
+
+while (my $line = <>) {
+
+    chomp $line;
+
+    if (! ($line =~ /\\input\s*\{(.+)\}/)) {
+	print "$line\n"; 
+	next; 
+    }
+    
+    my $filename= "$1.tex"; 
+
+    if (! ($line =~ /^\s*\\input\s*\{.+\}\s*$/)) {
+	print STDERR "line:$line\n";
+	die "Error:  \\input commands must be isolated on lines"; 
+    }
+
+    system("cat", "--", $filename); 
+}
