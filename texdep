@@ -55,7 +55,9 @@ sed -e 's,$,.bib,'
 <"$file" sed -E -e '
 s,^.*\\bibliographystyle\{(.+)\}.*$,\1.bst,
 t;d
-'
+' | while IFS= read -r filename ; do
+	[ -e "$filename" ] && echo "$filename"
+done
 
 #
 # Plots
