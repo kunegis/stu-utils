@@ -49,6 +49,15 @@ s,^[^{]*{\([^}]*\).*$,\1,
 sed -e 's,$,.bib,'
 
 #
+# Bibliography style file
+#
+
+<"$file" sed -E -e '
+s,^.*\\bibliographystyle\{(.+)\}.*$,\1.bst,
+t;d
+'
+
+#
 # Plots
 #
 
