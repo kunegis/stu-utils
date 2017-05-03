@@ -5,3 +5,8 @@ https://github.com/kunegis/stu
 
 These tools are not to be considered official, but rather a proof of
 concept.  
+
+For now, these are programs that can be used to perform individual steps
+in a Stu file.  In the long run, we will add Stu library files (*.stu)
+that can be used by Stu files to achieve certain Stu patterns. 
+
