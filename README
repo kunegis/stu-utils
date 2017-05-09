@@ -1,12 +1,12 @@
-These are various utilities to be used together with the Stu build
+These are various utilities to be used in conjunction with the Stu build
 automation tool, available at
 
 https://github.com/kunegis/stu
 
-These tools are not to be considered official, but rather a proof of
-concept.  
+These tools are not part of the main Stu distribution, but rather a
+proof of concept to show the capabilities of Stu.  
 
 For now, these are programs that can be used to perform individual steps
 in a Stu file.  In the long run, we will add Stu library files (*.stu)
-that can be used by Stu files to achieve certain Stu patterns. 
-
+that can be used by Stu files to achieve certain Stu programming
+patterns.
