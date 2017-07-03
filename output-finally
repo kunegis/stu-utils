@@ -1,0 +1,51 @@
+#! /bin/sh
+#
+# A very simple helper for writing Stu targets that take a long time to
+# compute, fail often, and write their output to stdout.
+#
+# In a Stu target like
+#
+#	>outputfile:   command
+#	{
+#		./command ...
+#	}
+#
+# 'command' is execute and writes all its output to stdout, which
+# is then redirected to 'outputfile' by Stu.  This works, but there is a
+# catch:  When ./command fails, the file 'outputfile' is already
+# overwritten.  In fact, 'outputfile' is overwritten by Stu even before
+# the command is started, due to the output redirection.  As a result,
+# a previously existing file 'outputfile' will be overwritten, in the
+# worst case by an empty file, when the command does not output
+# anything.  As a result, Stu will remove the file 'outputfile' after
+# the command fails, to avoid further invocations to consider the (empty
+# or otherwise incomplete file) up to date.  Instead, this can be
+# written as
+#
+# 	outputfile:  command
+#	{
+#		output-finally outputfile ./command ... 
+#	}
+#
+# I.e., this scripts simply redirects the output of the command to a
+# temporary file, and only when the command succeeds does it overwrite
+# 'outputfile'.  Note:  All this may be done automatically by Stu in the
+# future. 
+#
+
+set -e
+
+tmpfile="$(mktemp)"
+# How to check whether mktemp(1) fails?
+
+[ -n "$tmpfile" ] || {
+	echo >&2 "*** $0:  Error using mktemp(1)"
+	exit 1
+}
+
+outputfile="$1"
+shift
+
+"$@" >"$tmpfile"
+
+mv -f -- "$tmpfile" "$outputfile"
