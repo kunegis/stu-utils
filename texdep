@@ -95,10 +95,9 @@ done
 #
 
 <"$file" sed -E -e '
-s,^[^%]*\\input.*\{([^}]+)\}.*$,\1,
+s,^[^%]*\\(input|include).*\{([^}]+)\}.*$,\2,
 t
 d
-#/\\input.*\{/!d;s,^.*\{,,;s,\}.*$,,
 ' |
 while IFS= read -r name ; do
 	if [ -z "$name" ] ; then
