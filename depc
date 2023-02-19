@@ -1,0 +1,38 @@
+#! /bin/sh
+#
+# Compute C/C++ dependencies.  Given a source file, output all files that are
+# used by that file, including the file itself.  In other words, output the
+# dependencies of the given file. 
+#
+# INVOCATION 
+#	$0 $FILENAME
+#		where $FILENAME is the given file
+#
+# STDOUT
+#	The needed files, one per line
+#
+
+set -e
+
+TMPDIR=${TMPDIR:-/tmp}
+TMPFILE="$TMPDIR/depc.$$"
+
+echo "$1" >"$TMPFILE"
+
+while :
+do
+	rm -f "$TMPFILE".new
+	r=0
+	for file in $(cat "$TMPFILE")
+	do
+		r=1
+		echo "$file"
+		dir=$(dirname "$file")
+		if [ -e "$file" ]; then
+			<"$file" >>"$TMPFILE".new sed -E -e 's,^\s*#\s*include\s+"(.*)",'"$dir"'/\1,;t;d'
+		fi
+	done
+	if [ "$r" = 0 ]; then  exit 0;  fi
+	cp "$TMPFILE".new "$TMPFILE" 
+done |
+sort -u 
